@@ -4,7 +4,7 @@ machine:
 
 database:
   override:
-    - psql -U ubuntu -c "CREATE USER jdbc WITH PASSWORD 'jdbc'"
+    - psql -U ubuntu -c "CREATE USER jdbc WITH SUPERUSER PASSWORD 'jdbc'"
     - psql -U ubuntu -c "CREATE DATABASE jdbc OWNER jdbc"
 
 dependencies:
