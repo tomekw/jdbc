@@ -67,6 +67,26 @@ options = {
 connection_pool = Hucpa::ConnectionPool.new(options)
 ```
 
+Query for records:
+
+```ruby
+gateway = JDBC::Gateway.new(connection_pool: connection_pool)
+
+gateway.query("SELECT * FROM things")
+=> [
+  {
+    id: 1,
+    name: "Foo",
+    created_at: DateTime.new(2017, 2, 1, 10, 20, 45)
+  },
+  {
+    id: 2,
+    name: "Bar",
+    created_at: DateTime.new(2017, 2, 1, 10, 21, 47)
+  }
+]
+```
+
 Close the connection pool:
 
 ```ruby
