@@ -64,7 +64,7 @@ options = {
   username: "jdbc"
 }
 
-connection_pool = Jdbc::ConnectionPool.new(options)
+connection_pool = Hucpa::ConnectionPool.new(options)
 ```
 
 Close the connection pool:
