@@ -39,7 +39,7 @@ GEM
       dry-logic (~> 0.4, >= 0.4.0)
       dry-types (~> 0.9, >= 0.9.0)
     ffi (1.9.17-java)
-    hucpa (0.2.1-java)
+    hucpa (0.2.2-java)
       dry-validation (~> 0.10)
     inflecto (0.0.2)
     jdbc-postgres (9.4.1206)
