@@ -18,10 +18,7 @@ module JDBC
 
     COERCIONS_MAP = {
       uuid: :to_s,
-      text: :identity,
-      int4: :identity,
-      timestamp: :to_date_time,
-      varchar: :identity
+      timestamp: :to_date_time
     }.freeze
     private_constant :COERCIONS_MAP
   end
