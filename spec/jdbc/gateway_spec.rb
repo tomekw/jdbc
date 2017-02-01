@@ -23,10 +23,33 @@ RSpec.describe JDBC::Gateway do
       ]
     end
 
-    let(:sql) { "SELECT * FROM things ORDER BY some_timestamp" }
+    let(:results) { gateway.query(sql) }
 
-    it "returns seeded records" do
-      expect(gateway.query(sql)).to eq seeded_records
+    context "when asking for all seeded records" do
+      let(:sql) { "SELECT * FROM things ORDER BY some_timestamp" }
+      let(:expected_results) { seeded_records }
+
+      it "returns them" do
+        expect(results).to eq expected_results
+      end
+    end
+
+    context "when asking for arbitrary values" do
+      let(:sql) { "SELECT 1 AS one, TRUE AS true, FALSE AS false" }
+      let(:expected_results) { [{ one: 1, true: true, false: false }] }
+
+      it "returns them" do
+        expect(results).to eq expected_results
+      end
+    end
+
+    context "when asking for a count as a query" do
+      let(:sql) { "SELECT COUNT(*) AS count FROM things" }
+      let(:expected_results) { [{ count: 2 }] }
+
+      it "returns count as an array" do
+        expect(results).to eq expected_results
+      end
     end
   end
 end
