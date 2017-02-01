@@ -1,0 +1,21 @@
+version: "2"
+services:
+  app:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      JRUBY_OPTS: --debug
+    volumes:
+      - .:/jdbc
+      - ${HOME}/.ssh:/root/.ssh:ro
+  postgres:
+    environment:
+      POSTGRES_USER: jdbc
+      POSTGRES_PASSWORD: jdbc
+    image: postgres:9.6.1
+    volumes:
+      - postgres:/var/lib/postgresql/data
+volumes:
+  postgres:
+    driver: local

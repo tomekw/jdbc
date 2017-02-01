@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+
+database:
+  override:
+    - psql -U ubuntu -c "CREATE USER jdbc WITH PASSWORD 'jdbc'"
+    - psql -U ubuntu -c "CREATE DATABASE jdbc OWNER jdbc"
+
+dependencies:
+  override:
+    - docker build --rm=false -t tomekw/jdbc .
+
+test:
+  override:
+    - docker run --net=host --env DATABASE_HOST=localhost --rm tomekw/jdbc rubocop
+    - docker run --net=host --env DATABASE_HOST=localhost --rm tomekw/jdbc rspec spec
