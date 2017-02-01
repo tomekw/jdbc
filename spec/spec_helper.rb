@@ -23,7 +23,7 @@ def connection_pool
     adapter: :postgresql,
     database_name: "jdbc",
     password: "jdbc",
-    server_name: "postgres",
+    server_name: ENV.fetch("DATABASE_HOST", "postgres"),
     username: "jdbc"
   )
 end
