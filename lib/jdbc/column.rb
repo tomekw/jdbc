@@ -1,6 +1,6 @@
 module JDBC
   class Column
-    attr_reader :index, :label
+    attr_reader :index, :label, :jdbc_type
 
     def initialize(index:, label:, jdbc_type:)
       @index = index
@@ -11,10 +11,6 @@ module JDBC
     def coerce_proc
       Coercions.public_send(COERCIONS_MAP.fetch(jdbc_type, :identity))
     end
-
-    private
-
-    attr_reader :jdbc_type
 
     COERCIONS_MAP = {
       uuid: :to_s,
