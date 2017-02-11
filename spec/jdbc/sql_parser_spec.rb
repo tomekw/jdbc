@@ -27,4 +27,20 @@ RSpec.describe JDBC::SqlParser do
       end.to raise_error(ArgumentError, error_message)
     end
   end
+
+  context "when bindings provided" do
+    let(:sql) { "SELECT * FROM things WHERE bar = :bar AND foo = :foo" }
+    let(:bindings) { { foo: "foo", bar: 1 } }
+
+    let(:expected_result) do
+      [
+        "SELECT * FROM things WHERE bar = ? AND foo = ?",
+        [1, "foo"]
+      ]
+    end
+
+    it "returns the parsed query with bindings in the correct order" do
+      expect(parser.parse).to eq expected_result
+    end
+  end
 end
