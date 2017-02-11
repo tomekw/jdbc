@@ -5,17 +5,13 @@ module JDBC
     end
 
     def query(sql, bindings = {})
-      connection_pool.with_connection do |connection|
+      connection_pool.with_connection do |conn|
         begin
-          statement = PreparedStatementBuilder.new(
-            connection: connection,
-            sql: sql,
-            bindings: bindings
-          ).build
+          statement = PreparedStatementBuilder.new(connection: conn, sql: sql, bindings: bindings).build
 
           result_set = statement.execute_query
 
-          ResultSetBuilder.new(result_set: result_set).build
+          ResultSetTransformer.new(result_set: result_set).transform
         ensure
           statement.close
         end

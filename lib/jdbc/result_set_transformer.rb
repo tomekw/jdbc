@@ -1,10 +1,10 @@
 module JDBC
-  class ResultSetBuilder
+  class ResultSetTransformer
     def initialize(result_set:)
       @result_set = result_set
     end
 
-    def build
+    def transform
       [].tap do |results|
         while result_set.next
           results << meta_data.each_with_object({}) do |column, record|
