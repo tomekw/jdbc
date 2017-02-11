@@ -2,7 +2,7 @@
 
 module JDBC
   class SqlParser
-    def initialize(sql, bindings = {})
+    def initialize(sql:, bindings:)
       @sql = sql
       @bindings = bindings
     end
@@ -10,7 +10,7 @@ module JDBC
     def parse
       fail ArgumentError, sql_binding_mismatch_msg if sql_binding_mismatch?
 
-      [parsed_sql, binding_values]
+      [jdbc_sql, binding_values]
     end
 
     private
@@ -55,7 +55,7 @@ module JDBC
       @sql_tag_names ||= sql.scan(SQL_TAGS_REGEXP).flatten.map(&:to_sym)
     end
 
-    def parsed_sql
+    def jdbc_sql
       sql.gsub(REPLACE_SQL_TAGS_REGEXP) do |tag|
         tag_value = bindings.fetch(tag.delete(COLON).to_sym)
 

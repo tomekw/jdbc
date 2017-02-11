@@ -4,11 +4,21 @@ module JDBC
       @connection_pool = connection_pool
     end
 
-    def query(sql)
+    def query(sql, bindings = {})
       connection_pool.with_connection do |connection|
-        result_set = connection.prepare_statement(sql).execute_query
+        begin
+          statement = PreparedStatementBuilder.new(
+            connection: connection,
+            sql: sql,
+            bindings: bindings
+          ).build
 
-        ResultSetBuilder.new(result_set: result_set).build
+          result_set = statement.execute_query
+
+          ResultSetBuilder.new(result_set: result_set).build
+        ensure
+          statement.close
+        end
       end
     end
 

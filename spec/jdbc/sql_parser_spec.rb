@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe JDBC::SqlParser do
-  subject(:parser) { described_class.new(sql, bindings) }
+  subject(:parser) { described_class.new(sql: sql, bindings: bindings) }
 
   context "when no bindings for a simple SQL query provided" do
     let(:sql) { "SELECT foo FROM things WHERE bar = 1" }
