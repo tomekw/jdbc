@@ -23,8 +23,20 @@ module JDBC
     SQL_TAGS_REGEXP = /:(\w+)(?:[\s;]|\z)/
     private_constant :SQL_TAGS_REGEXP
 
+    COLON = ":"
+    private_constant :COLON
+
     NONE = "(none)"
     private_constant :NONE
+
+    JOIN_COMMA = ", "
+    private_constant :JOIN_COMMA
+
+    LEFT_PAREN = "("
+    private_constant :LEFT_PAREN
+
+    RIGHT_PAREN = ")"
+    private_constant :RIGHT_PAREN
 
     QUESTION_MARK = "?"
     private_constant :QUESTION_MARK
@@ -44,7 +56,15 @@ module JDBC
     end
 
     def parsed_sql
-      sql.gsub(REPLACE_SQL_TAGS_REGEXP, QUESTION_MARK)
+      sql.gsub(REPLACE_SQL_TAGS_REGEXP) do |tag|
+        tag_value = bindings.fetch(tag.delete(COLON).to_sym)
+
+        if tag_value.is_a?(Array)
+          LEFT_PAREN + tag_value.map { QUESTION_MARK }.join(JOIN_COMMA) + RIGHT_PAREN
+        else
+          QUESTION_MARK
+        end
+      end
     end
 
     def sql_binding_mismatch?
