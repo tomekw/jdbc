@@ -7,7 +7,8 @@ module JDBC
 
     def build
       connection.prepare_statement(jdbc_sql).tap do |statement|
-        binding_values.each do |value|
+        binding_values.each_with_index do |value, index|
+          statement.set_object(index + 1, value)
         end
       end
     end

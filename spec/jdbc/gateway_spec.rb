@@ -23,7 +23,9 @@ RSpec.describe JDBC::Gateway do
       ]
     end
 
-    let(:results) { gateway.query(sql) }
+    let(:bindings) { {} }
+
+    let(:results) { gateway.query(sql, bindings) }
 
     context "when asking for all seeded records" do
       let(:sql) { "SELECT * FROM things ORDER BY some_timestamp" }
@@ -48,6 +50,16 @@ RSpec.describe JDBC::Gateway do
       let(:expected_results) { [{ count: 2 }] }
 
       it "returns count as an array" do
+        expect(results).to eq expected_results
+      end
+    end
+
+    context "when simple where with bindings" do
+      let(:sql) { "SELECT * FROM things WHERE some_text = :some_text" }
+      let(:bindings) { { some_text: "Hello" } }
+      let(:expected_results) { seeded_records.select { |r| r.fetch(:some_text) == "Hello" } }
+
+      it "returns the correct rows" do
         expect(results).to eq expected_results
       end
     end
