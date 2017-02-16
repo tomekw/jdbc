@@ -68,7 +68,7 @@ module JDBC
     end
 
     def sql_binding_mismatch?
-      binding_names.sort != sql_tag_names.sort
+      binding_names.sort != sql_tag_names.uniq.sort
     end
 
     def sql_binding_mismatch_msg

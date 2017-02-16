@@ -44,6 +44,22 @@ RSpec.describe JDBC::SqlParser do
     end
   end
 
+  context "when the same binding should be matched twice" do
+    let(:sql) { "SELECT * FROM things WHERE bar = :bar OR foo = :bar" }
+    let(:bindings) { { bar: 1 } }
+
+    let(:expected_result) do
+      [
+        "SELECT * FROM things WHERE bar = ? OR foo = ?",
+        [1, 1]
+      ]
+    end
+
+    it "returns the parsed query" do
+      expect(parser.parse).to eq expected_result
+    end
+  end
+
   context "when IN bindings provided" do
     let(:sql) { "SELECT * FROM things WHERE bar IN :bar_ids AND foo = :foo" }
     let(:bindings) { { foo: "foo", bar_ids: [4, 2] } }
