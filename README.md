@@ -65,13 +65,13 @@ options = {
 }
 
 connection_pool = Hucpa::ConnectionPool.new(options)
+
+gateway = JDBC::Gateway.new(connection_pool: connection_pool)
 ```
 
 Query for records:
 
 ```ruby
-gateway = JDBC::Gateway.new(connection_pool: connection_pool)
-
 gateway.query("SELECT * FROM things")
 => [
   {
@@ -87,11 +87,80 @@ gateway.query("SELECT * FROM things")
 ]
 ```
 
+Query bindings can be provided:
+
+```ruby
+gateway.query("SELECT * FROM things WHERE name = :name", name: "Foo")
+=> [
+  {
+    id: 1,
+    name: "Foo",
+    created_at: DateTime.new(2017, 2, 1, 10, 20, 45)
+  }
+]
+```
+
+Optionally, bindings can be annotated with a [JDBC type](#jdbc-types).
+It is in fact required when value can be `nil`:
+
+```ruby
+gateway.query("SELECT * FROM things WHERE name = :name:VARCHAR OR (name IS NULL AND :name:VARCHAR IS NULL)", name: nil)
+=> [
+  {
+    id: 3,
+    name: nil,
+    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+  }
+]
+```
+
 Close the connection pool:
 
 ```ruby
 connection_pool.close
 ```
+
+## JDBC types
+
+* `ARRAY`
+* `BIGINT`
+* `BINARY`
+* `BIT`
+* `BLOB`
+* `BOOLEAN`
+* `CHAR`
+* `CLOB`
+* `DATALINK`
+* `DATE`
+* `DECIMAL`
+* `DISTINCT`
+* `DOUBLE`
+* `FLOAT`
+* `INTEGER`
+* `JAVA_OBJECT`
+* `LONGNVARCHAR`
+* `LONGVARBINARY`
+* `LONGVARCHAR`
+* `NCHAR`
+* `NCLOB`
+* `NULL`
+* `NUMERIC`
+* `NVARCHAR`
+* `OTHER`
+* `REAL`
+* `REF`
+* `REF_CURSOR`
+* `ROWID`
+* `SMALLINT`
+* `SQLXML`
+* `STRUCT`
+* `TIME`
+* `TIME_WITH_TIMEZONE`
+* `TIMESTAMP`
+* `TIMESTAMP_WITH_TIMEZONE`
+* `TINYINT`
+* `VARBINARY`
+* `VARCHAR`
 
 ## Development
 
