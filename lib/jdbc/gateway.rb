@@ -7,7 +7,10 @@ module JDBC
     def query(sql, bindings = {})
       connection_pool.with_connection do |conn|
         begin
-          statement = PreparedStatementBuilder.new(connection: conn, sql: sql, bindings: bindings).build
+          jdbc_sql, binding_values = SqlParser.new(sql: sql, bindings: bindings).parse
+
+          statement =
+            PreparedStatementBuilder.for_query(connection: conn, jdbc_sql: jdbc_sql, binding_values: binding_values)
 
           result_set = statement.execute_query
 

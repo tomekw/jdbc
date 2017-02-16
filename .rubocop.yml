@@ -15,6 +15,9 @@ Metrics/ClassLength:
 Metrics/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Max: 12
+
 Style/AndOr:
   EnforcedStyle: conditionals
 

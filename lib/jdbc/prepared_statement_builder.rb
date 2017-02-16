@@ -1,27 +1,34 @@
 module JDBC
   class PreparedStatementBuilder
-    def initialize(connection:, sql:, bindings:)
-      @connection = connection
-      @jdbc_sql, @binding_values = SqlParser.new(sql: sql, bindings: bindings).parse
+    def initialize(statement:, binding_values:)
+      @statement = statement
+      @binding_values = binding_values
+    end
+
+    def self.for_query(connection:, jdbc_sql:, binding_values:)
+      new(
+        statement: connection.prepare_statement(jdbc_sql),
+        binding_values: binding_values
+      ).build
     end
 
     def build
-      connection.prepare_statement(jdbc_sql).tap do |statement|
-        binding_values.each_with_index do |(value, type), index|
-          method_name, method_parameters = ParameterSetter.new(
-            index: index,
-            value: value,
-            type: type
-          ).build
+      binding_values.each_with_index do |(value, type), index|
+        method_name, method_parameters = ParameterSetter.new(
+          index: index,
+          value: value,
+          type: type
+        ).build
 
-          statement.public_send(method_name, *method_parameters)
-        end
+        statement.public_send(method_name, *method_parameters)
       end
+
+      statement
     end
 
     private
 
-    attr_reader :connection, :jdbc_sql, :binding_values
+    attr_reader :statement, :binding_values
 
     class ParameterSetter
       def initialize(index:, value:, type:)
