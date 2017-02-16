@@ -13,7 +13,7 @@ module JDBC
 
           ResultSetTransformer.new(result_set: result_set).transform
         ensure
-          statement.close
+          statement.close if statement
         end
       end
     end

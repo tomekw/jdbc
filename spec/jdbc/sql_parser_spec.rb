@@ -6,20 +6,17 @@ RSpec.describe JDBC::SqlParser do
   context "when no bindings for a simple SQL query provided" do
     let(:sql) { "SELECT foo FROM things WHERE bar = 1" }
     let(:bindings) { {} }
-
-    let(:parsed_query) { [sql, []] }
+    let(:expected_result) { [sql, []] }
 
     it "returns the query as-is" do
-      expect(parser.parse).to eq parsed_query
+      expect(parser.parse).to eq expected_result
     end
   end
 
   context "when number of bindings doesn't match the number of tags" do
     let(:sql) { "SELECT foo FROM things WHERE bar = :bar" }
     let(:bindings) { {} }
-    let(:error_message) do
-      "SQL query bindings mismatch, given: (none), expected: bar"
-    end
+    let(:error_message) { "SQL query bindings mismatch, given: (none), expected: bar" }
 
     it "raises error" do
       expect do

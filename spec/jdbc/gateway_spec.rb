@@ -63,5 +63,17 @@ RSpec.describe JDBC::Gateway do
         expect(results).to eq expected_results
       end
     end
+
+    context "when number of bindings doesn't match the number of tags" do
+      let(:sql) { "SELECT foo FROM things WHERE bar = :bar" }
+      let(:bindings) { {} }
+      let(:error_message) { "SQL query bindings mismatch, given: (none), expected: bar" }
+
+      it "raises error" do
+        expect do
+          results
+        end.to raise_error(ArgumentError, error_message)
+      end
+    end
   end
 end
