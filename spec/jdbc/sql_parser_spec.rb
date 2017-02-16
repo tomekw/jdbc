@@ -25,6 +25,16 @@ RSpec.describe JDBC::SqlParser do
     end
   end
 
+  context "when types are casted" do
+    let(:sql) { "SELECT name::text FROM things" }
+    let(:bindings) { {} }
+    let(:expected_result) { [sql, []] }
+
+    it "returns the query when no bindings" do
+      expect(parser.parse).to eq expected_result
+    end
+  end
+
   context "when simple bindings provided" do
     let(:sql) { "SELECT * FROM things WHERE bar = :bar AND foo = :foo" }
     let(:bindings) { { foo: "foo", bar: 1 } }

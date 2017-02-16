@@ -78,17 +78,17 @@ module JDBC
     RIGHT_PAREN = ")"
     private_constant :RIGHT_PAREN
 
+    PIPE = "|"
+    private_constant :PIPE
+
     QUESTION_MARK = "?"
     private_constant :QUESTION_MARK
 
-    REPLACE_SQL_TAGS_REGEXP = /:\w+(:[A-Z_]+)?/
-    private_constant :REPLACE_SQL_TAGS_REGEXP
+    SQL_TAGS_REGEX = /\s:(\w+)(?::(#{JAVA_SQL_TYPES.join(PIPE)}))?(?:[\s;]|\z)/
+    private_constant :SQL_TAGS_REGEX
 
-    SQL_TAGS_REGEXP = /:(\w+)(?::(#{JAVA_SQL_TYPES.join('|')}))?(?:[\s;]|\z)/
-    private_constant :SQL_TAGS_REGEXP
-
-    TAG_CLEANUP_REGEXP = /#{COLON}(#{JAVA_SQL_TYPES.join('|')})?/
-    private_constant :TAG_CLEANUP_REGEXP
+    TAG_CLEANUP_REGEX = /#{COLON}(#{JAVA_SQL_TYPES.join(PIPE)})?/
+    private_constant :TAG_CLEANUP_REGEX
 
     def binding_names
       @binding_names ||= bindings.keys.map(&:to_sym)
@@ -105,14 +105,22 @@ module JDBC
     end
 
     def sql_tags
-      @sql_tags ||= sql.scan(SQL_TAGS_REGEXP).map do |(tag, type)|
+      @sql_tags ||= sql.scan(SQL_TAGS_REGEX).map do |(tag, type)|
         [tag.to_sym, type]
       end
     end
 
+    def replace_sql_tags_regex
+      @replace_sql_tags_regex ||= /:(#{sql_tags.map { |t| t.compact.join(COLON) }.join(PIPE) })/
+    end
+
     def jdbc_sql
-      sql.gsub(REPLACE_SQL_TAGS_REGEXP) do |tag|
-        tag_name = tag.gsub(TAG_CLEANUP_REGEXP, EMPTY_STRING).to_sym
+      sql_tags.empty? ? sql : parsed_sql
+    end
+
+    def parsed_sql
+      sql.gsub(replace_sql_tags_regex) do |tag|
+        tag_name = tag.gsub(TAG_CLEANUP_REGEX, EMPTY_STRING).to_sym
         tag_value = bindings.fetch(tag_name)
 
         if tag_value.is_a?(Array)
