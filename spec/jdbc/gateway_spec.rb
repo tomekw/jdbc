@@ -64,6 +64,16 @@ RSpec.describe JDBC::Gateway do
       end
     end
 
+    context "when simple where with bindings (type annotated)" do
+      let(:sql) { "SELECT * FROM things WHERE some_text = :some_text:VARCHAR" }
+      let(:bindings) { { some_text: "Hello" } }
+      let(:expected_results) { seeded_records.select { |r| r.fetch(:some_text) == "Hello" } }
+
+      it "returns the correct rows" do
+        expect(results).to eq expected_results
+      end
+    end
+
     context "when number of bindings doesn't match the number of tags" do
       let(:sql) { "SELECT foo FROM things WHERE bar = :bar" }
       let(:bindings) { {} }
@@ -73,6 +83,22 @@ RSpec.describe JDBC::Gateway do
         expect do
           results
         end.to raise_error(ArgumentError, error_message)
+      end
+    end
+
+    context "when simple where with NULL bindings" do
+      let(:sql) do
+        <<-SQL
+          SELECT * FROM things WHERE some_nullable_string = :nullable:VARCHAR
+          OR (some_nullable_string IS NULL AND :nullable:VARCHAR IS NULL)
+        SQL
+      end
+
+      let(:bindings) { { nullable: nil } }
+      let(:expected_results) { seeded_records.select { |r| r.fetch(:some_nullable_string).nil? } }
+
+      it "returns the correct rows" do
+        expect(results).to eq expected_results
       end
     end
   end

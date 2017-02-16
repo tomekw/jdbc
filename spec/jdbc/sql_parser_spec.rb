@@ -32,7 +32,7 @@ RSpec.describe JDBC::SqlParser do
     let(:expected_result) do
       [
         "SELECT * FROM things WHERE bar = ? AND foo = ?",
-        [1, "foo"]
+        [[1, nil], ["foo", nil]]
       ]
     end
 
@@ -48,7 +48,7 @@ RSpec.describe JDBC::SqlParser do
     let(:expected_result) do
       [
         "SELECT * FROM things WHERE bar = ? OR foo = ?",
-        [1, 1]
+        [[1, nil], [1, nil]]
       ]
     end
 
@@ -64,7 +64,7 @@ RSpec.describe JDBC::SqlParser do
     let(:expected_result) do
       [
         "SELECT * FROM things WHERE bar IN (?, ?) AND foo = ?",
-        [4, 2, "foo"]
+        [[4, nil], [2, nil], ["foo", nil]]
       ]
     end
 

@@ -9,6 +9,9 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"
 
+Metrics/ClassLength:
+  Max: 120
+
 Metrics/LineLength:
   Max: 120
 
