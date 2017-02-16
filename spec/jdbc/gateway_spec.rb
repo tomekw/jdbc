@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe JDBC::Gateway do
+RSpec.describe JDBC::Gateway, type: :db do
   subject(:gateway) { described_class.new(connection_pool: connection_pool) }
 
   describe "#query" do

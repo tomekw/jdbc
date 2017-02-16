@@ -30,6 +30,7 @@ end
 
 setup_sql = File.read("spec/support/sql/setup.sql")
 seed_sql = File.read("spec/support/sql/seed.sql")
+cleanup_sql = File.read("spec/support/sql/cleanup.sql")
 
 RSpec.configure do |config|
   config.order = :random
@@ -37,7 +38,18 @@ RSpec.configure do |config|
   config.before(:all) do
     connection_pool.with_connection do |connection|
       connection.create_statement.execute_update(setup_sql)
+    end
+  end
+
+  config.before(:example, type: :db) do
+    connection_pool.with_connection do |connection|
       connection.create_statement.execute_update(seed_sql)
+    end
+  end
+
+  config.after(:example, type: :db) do
+    connection_pool.with_connection do |connection|
+      connection.create_statement.execute_update(cleanup_sql)
     end
   end
 end
