@@ -23,12 +23,11 @@ RSpec.describe JDBC::Gateway, type: :db do
       ]
     end
 
-    let(:bindings) { {} }
-
     let(:results) { gateway.query(sql, bindings) }
 
     context "when asking for all seeded records" do
       let(:sql) { "SELECT * FROM things ORDER BY some_timestamp" }
+      let(:bindings) { {} }
       let(:expected_results) { seeded_records }
 
       it "returns them" do
@@ -38,6 +37,7 @@ RSpec.describe JDBC::Gateway, type: :db do
 
     context "when asking for arbitrary values" do
       let(:sql) { "SELECT 1 AS one, TRUE AS true, FALSE AS false" }
+      let(:bindings) { {} }
       let(:expected_results) { [{ one: 1, true: true, false: false }] }
 
       it "returns them" do
@@ -47,6 +47,7 @@ RSpec.describe JDBC::Gateway, type: :db do
 
     context "when asking for a count as a query" do
       let(:sql) { "SELECT COUNT(*) AS count FROM things" }
+      let(:bindings) { {} }
       let(:expected_results) { [{ count: 2 }] }
 
       it "returns count as an array" do
