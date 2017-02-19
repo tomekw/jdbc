@@ -155,10 +155,11 @@ Close the connection pool:
 connection_pool.close
 ```
 
-## Things that won't work (yet)
+## (Known) things that won't work (yet)
 
 * passing `UUID`s as bindings parameters
-* passing timestamps as parameters
+* passing timestamps as bindings parameters
+* groupping SQL queries / commands in transactions
 
 ## JDBC types
 
