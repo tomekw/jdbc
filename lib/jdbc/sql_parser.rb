@@ -84,10 +84,10 @@ module JDBC
     QUESTION_MARK = "?"
     private_constant :QUESTION_MARK
 
-    SQL_TAGS_REGEX = /\s:(\w+)(?::(#{JAVA_SQL_TYPES.join(PIPE)}))?(?:[\s;]|\z)/
+    SQL_TAGS_REGEX = /\s:(\w+)(?::(#{JAVA_SQL_TYPES.join(PIPE)}))?(?:[\s,;]|\z)/
     private_constant :SQL_TAGS_REGEX
 
-    TAG_CLEANUP_REGEX = /#{COLON}(#{JAVA_SQL_TYPES.join(PIPE)})?/
+    TAG_CLEANUP_REGEX = /#{COLON}(#{JAVA_SQL_TYPES.reverse.join(PIPE)})?/
     private_constant :TAG_CLEANUP_REGEX
 
     def binding_names

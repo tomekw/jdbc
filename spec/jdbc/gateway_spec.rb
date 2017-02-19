@@ -13,7 +13,7 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_id, some_text, some_number, some_timestamp, some_nullable_string
           ) VALUES (
             'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, 'Insert', 42, '2017-02-02 10:00:00', 'Me'
-          );
+          )
         SQL
       end
       let(:bindings) { {} }
@@ -26,6 +26,41 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_number: 42,
             some_timestamp: DateTime.new(2017, 2, 2, 10, 0, 0),
             some_nullable_string: "Me"
+          }
+        ]
+      end
+
+      it "inserts the record" do
+        expect(result).to eq expected_result
+      end
+    end
+
+    context "when bindings provided" do
+      let(:sql) do
+        <<-SQL
+          INSERT INTO things (
+            some_id, some_text, some_number, some_timestamp, some_nullable_string
+          ) VALUES (
+            'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, :some_text, :some_number, '2017-02-02 10:00:00', :some_nullable_string
+          )
+        SQL
+      end
+      let(:bindings) do
+        {
+          some_text: "Insert",
+          some_number: 42,
+          some_nullable_string: nil
+        }
+      end
+
+      let(:expected_result) do
+        [
+          {
+            some_id: "eaabc03b-7cb0-4ecb-a335-d90eacb03513",
+            some_text: "Insert",
+            some_number: 42,
+            some_timestamp: DateTime.new(2017, 2, 2, 10, 0, 0),
+            some_nullable_string: nil
           }
         ]
       end

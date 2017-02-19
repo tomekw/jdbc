@@ -120,6 +120,11 @@ Close the connection pool:
 connection_pool.close
 ```
 
+## Things that won't work (yet)
+
+* passing `UUID`s as bindings parameters
+* passing timestamps as parameters
+
 ## JDBC types
 
 * `ARRAY`
