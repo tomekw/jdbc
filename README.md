@@ -127,6 +127,17 @@ gateway.command("INSERT INTO things (name, created_at) VALUES (:name, NOW())", n
 ]
 ```
 
+```ruby
+gateway.command("UPDATE things SET name = :name WHERE id < :id", name: "Bar", id: 2)
+=> [
+  {
+    id: 1,
+    name: "Bar",
+    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+  }
+]
+```
+
 Close the connection pool:
 
 ```ruby

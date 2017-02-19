@@ -69,6 +69,39 @@ RSpec.describe JDBC::Gateway, type: :db do
         expect(result).to eq expected_result
       end
     end
+
+    context "when UPDATE requested" do
+      let(:sql) { "UPDATE things SET some_nullable_string = :nullable WHERE some_number > :zero" }
+      let(:bindings) do
+        {
+          nullable: "Foo",
+          zero: 0
+        }
+      end
+
+      let(:expected_result) do
+        [
+          {
+            some_id: "a5142003-9453-4fed-ab90-f0bc47db6404",
+            some_text: "Hello",
+            some_number: 42,
+            some_timestamp: DateTime.new(2017, 2, 1, 10, 0, 0),
+            some_nullable_string: "Foo"
+          },
+          {
+            some_id: "1f87e249-d90a-44c7-a986-51a77cdb01f4",
+            some_text: "Foo",
+            some_number: 1,
+            some_timestamp: DateTime.new(2017, 2, 10, 14, 0, 0),
+            some_nullable_string: "Foo"
+          }
+        ]
+      end
+
+      it "updates the record" do
+        expect(result).to eq expected_result
+      end
+    end
   end
 
   describe "#query" do
