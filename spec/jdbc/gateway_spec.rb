@@ -6,6 +6,10 @@ RSpec.describe JDBC::Gateway, type: :db do
   describe "#command" do
     let(:result) { gateway.command(sql, bindings) }
 
+    def things_count
+      gateway.query("SELECT COUNT(*) AS count FROM things").first.fetch(:count)
+    end
+
     context "when simple INSERT without bindings" do
       let(:sql) do
         <<-SQL
@@ -32,6 +36,12 @@ RSpec.describe JDBC::Gateway, type: :db do
 
       it "inserts the record" do
         expect(result).to eq expected_result
+      end
+
+      it "changes the things count" do
+        expect do
+          result
+        end.to change { things_count }.by(1)
       end
     end
 
@@ -68,6 +78,12 @@ RSpec.describe JDBC::Gateway, type: :db do
       it "inserts the record" do
         expect(result).to eq expected_result
       end
+
+      it "changes the things count" do
+        expect do
+          result
+        end.to change { things_count }.by(1)
+      end
     end
 
     context "when UPDATE requested" do
@@ -100,6 +116,44 @@ RSpec.describe JDBC::Gateway, type: :db do
 
       it "updates the record" do
         expect(result).to eq expected_result
+      end
+
+      it "doesn't change the things count" do
+        expect do
+          result
+        end.not_to change { things_count }
+      end
+    end
+
+    context "when DELETE requested" do
+      let(:sql) { "DELETE FROM things WHERE some_text = :text AND some_number > :ten" }
+      let(:bindings) do
+        {
+          text: "Hello",
+          ten: 10
+        }
+      end
+
+      let(:expected_result) do
+        [
+          {
+            some_id: "a5142003-9453-4fed-ab90-f0bc47db6404",
+            some_text: "Hello",
+            some_number: 42,
+            some_timestamp: DateTime.new(2017, 2, 1, 10, 0, 0),
+            some_nullable_string: "World"
+          }
+        ]
+      end
+
+      it "deletes the record" do
+        expect(result).to eq expected_result
+      end
+
+      it "changes the things count" do
+        expect do
+          result
+        end.to change { things_count }.by(-1)
       end
     end
   end

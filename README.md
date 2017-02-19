@@ -138,6 +138,17 @@ gateway.command("UPDATE things SET name = :name WHERE id < :id", name: "Bar", id
 ]
 ```
 
+```ruby
+gateway.command("DELETE FROM things WHERE id = :id", id: 1)
+=> [
+  {
+    id: 1,
+    name: "Bar",
+    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+  }
+]
+```
+
 Close the connection pool:
 
 ```ruby
