@@ -114,6 +114,19 @@ gateway.query("SELECT * FROM things WHERE name = :name:VARCHAR OR (name IS NULL 
 ]
 ```
 
+Pass commands:
+
+```ruby
+gateway.command("INSERT INTO things (name, created_at) VALUES (:name, NOW())", name: "Foo")
+=> [
+  {
+    id: 4,
+    name: "Foo",
+    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+  }
+]
+```
+
 Close the connection pool:
 
 ```ruby
