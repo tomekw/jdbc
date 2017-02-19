@@ -3,6 +3,39 @@ require "spec_helper"
 RSpec.describe JDBC::Gateway, type: :db do
   subject(:gateway) { described_class.new(connection_pool: connection_pool) }
 
+  describe "#command" do
+    let(:result) { gateway.command(sql, bindings) }
+
+    context "when simple INSERT without bindings" do
+      let(:sql) do
+        <<-SQL
+          INSERT INTO things (
+            some_id, some_text, some_number, some_timestamp, some_nullable_string
+          ) VALUES (
+            'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, 'Insert', 42, '2017-02-02 10:00:00', 'Me'
+          );
+        SQL
+      end
+      let(:bindings) { {} }
+
+      let(:expected_result) do
+        [
+          {
+            some_id: "eaabc03b-7cb0-4ecb-a335-d90eacb03513",
+            some_text: "Insert",
+            some_number: 42,
+            some_timestamp: DateTime.new(2017, 2, 2, 10, 0, 0),
+            some_nullable_string: "Me"
+          }
+        ]
+      end
+
+      it "inserts the record" do
+        expect(result).to eq expected_result
+      end
+    end
+  end
+
   describe "#query" do
     let(:seeded_records) do
       [

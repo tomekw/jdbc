@@ -5,6 +5,13 @@ module JDBC
       @binding_values = binding_values
     end
 
+    def self.for_command(connection:, jdbc_sql:, binding_values:)
+      new(
+        statement: connection.prepare_statement(jdbc_sql, java.sql.Statement::RETURN_GENERATED_KEYS),
+        binding_values: binding_values
+      ).build
+    end
+
     def self.for_query(connection:, jdbc_sql:, binding_values:)
       new(
         statement: connection.prepare_statement(jdbc_sql),
