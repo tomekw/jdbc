@@ -8,6 +8,9 @@ Please note the project support only JRuby (tested with 9.1.7.0+) on Java 8.
 
 The public API is subject to change before version `1.0.0`.
 
+The library is in the alpha state. It has been tested only with the `PostgreSQL` database, only basic queries and commands were tested.
+Please raise issues if any of your use cases is not working and I will be very happy to help!
+
 ## Installation
 
 Add this line to your application's Gemfile:
