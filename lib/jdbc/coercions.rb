@@ -10,9 +10,9 @@ module JDBC
     end
     module_function :to_s
 
-    def to_date_time
-      @to_date_time ||= ->(value) { DateTime.parse(value.to_s) }
+    def to_time
+      @to_time ||= ->(value) { Time.parse(value.to_s) }
     end
-    module_function :to_date_time
+    module_function :to_time
   end
 end

@@ -85,12 +85,12 @@ gateway.query("SELECT * FROM things")
   {
     id: 1,
     name: "Foo",
-    created_at: DateTime.new(2017, 2, 1, 10, 20, 45)
+    created_at: Time.parse("2017-02-01 10:20:45")
   },
   {
     id: 2,
     name: "Bar",
-    created_at: DateTime.new(2017, 2, 1, 10, 21, 47)
+    created_at: Time.parse("2017-02-01 10:21:47")
   }
 ]
 ```
@@ -103,7 +103,7 @@ gateway.query("SELECT * FROM things WHERE name = :name", name: "Foo")
   {
     id: 1,
     name: "Foo",
-    created_at: DateTime.new(2017, 2, 1, 10, 20, 45)
+    created_at: Time.parse("2017-02-01 10:20:45")
   }
 ]
 ```
@@ -117,7 +117,7 @@ gateway.query("SELECT * FROM things WHERE name = :name:VARCHAR OR (name IS NULL 
   {
     id: 3,
     name: nil,
-    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+    created_at: Time.parse("2017-02-02 10:20:45")
   }
 ]
 ```
@@ -125,12 +125,12 @@ gateway.query("SELECT * FROM things WHERE name = :name:VARCHAR OR (name IS NULL 
 Pass commands:
 
 ```ruby
-gateway.command("INSERT INTO things (name, created_at) VALUES (:name, NOW())", name: "Foo")
+gateway.command("INSERT INTO things (name, created_at) VALUES (:name, :created_at)", name: "Foo", created_at: Time.parse("2017-02-02 10:20:45"))
 => [
   {
     id: 4,
     name: "Foo",
-    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+    created_at: Time.parse("2017-02-02 10:20:45")
   }
 ]
 ```
@@ -141,7 +141,7 @@ gateway.command("UPDATE things SET name = :name WHERE id < :id", name: "Bar", id
   {
     id: 1,
     name: "Bar",
-    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+    created_at: Time.parse("2017-02-02 10:20:45")
   }
 ]
 ```
@@ -152,7 +152,7 @@ gateway.command("DELETE FROM things WHERE id = :id", id: 1)
   {
     id: 1,
     name: "Bar",
-    created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
+    created_at: Time.parse("2017-02-02 10:20:45")
   }
 ]
 ```
@@ -173,7 +173,6 @@ connection_pool.close
 ## (Known) things that won't work (yet)
 
 * passing `UUID`s as bindings parameters
-* passing timestamps as bindings parameters
 * groupping SQL queries / commands in transactions
 
 ## JDBC types

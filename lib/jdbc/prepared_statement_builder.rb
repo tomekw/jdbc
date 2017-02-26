@@ -60,7 +60,7 @@ module JDBC
         if value.nil?
           [parameter_index, jdbc_type || java.sql.Types::NULL]
         else
-          [parameter_index, value, jdbc_type].compact
+          [parameter_index, value.to_java, jdbc_type].compact
         end
       end
 

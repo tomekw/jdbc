@@ -47,7 +47,7 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_id: "eaabc03b-7cb0-4ecb-a335-d90eacb03513",
             some_text: "Insert",
             some_number: 42,
-            some_timestamp: DateTime.new(2017, 2, 2, 10, 0, 0),
+            some_timestamp: Time.parse("2017-02-02 10:00:00"),
             some_nullable_string: "Me"
           }
         ]
@@ -70,7 +70,8 @@ RSpec.describe JDBC::Gateway, type: :db do
           INSERT INTO things (
             some_id, some_text, some_number, some_timestamp, some_nullable_string
           ) VALUES (
-            'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, :some_text, :some_number, '2017-02-02 10:00:00', :some_nullable_string
+            'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, :some_text, :some_number,
+            :some_timestamp:TIMESTAMP, :some_nullable_string
           )
         SQL
       end
@@ -78,6 +79,7 @@ RSpec.describe JDBC::Gateway, type: :db do
         {
           some_text: "Insert",
           some_number: 42,
+          some_timestamp: Time.parse("2017-02-02 10:00:10"),
           some_nullable_string: nil
         }
       end
@@ -88,7 +90,7 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_id: "eaabc03b-7cb0-4ecb-a335-d90eacb03513",
             some_text: "Insert",
             some_number: 42,
-            some_timestamp: DateTime.new(2017, 2, 2, 10, 0, 0),
+            some_timestamp: Time.parse("2017-02-02 10:00:10"),
             some_nullable_string: nil
           }
         ]
@@ -120,14 +122,14 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_id: "a5142003-9453-4fed-ab90-f0bc47db6404",
             some_text: "Hello",
             some_number: 42,
-            some_timestamp: DateTime.new(2017, 2, 1, 10, 0, 0),
+            some_timestamp: Time.parse("2017-02-01 10:00:00"),
             some_nullable_string: "Foo"
           },
           {
             some_id: "1f87e249-d90a-44c7-a986-51a77cdb01f4",
             some_text: "Foo",
             some_number: 1,
-            some_timestamp: DateTime.new(2017, 2, 10, 14, 0, 0),
+            some_timestamp: Time.parse("2017-02-10 14:00:00"),
             some_nullable_string: "Foo"
           }
         ]
@@ -159,7 +161,7 @@ RSpec.describe JDBC::Gateway, type: :db do
             some_id: "a5142003-9453-4fed-ab90-f0bc47db6404",
             some_text: "Hello",
             some_number: 42,
-            some_timestamp: DateTime.new(2017, 2, 1, 10, 0, 0),
+            some_timestamp: Time.parse("2017-02-01 10:00:00"),
             some_nullable_string: "World"
           }
         ]
@@ -184,14 +186,14 @@ RSpec.describe JDBC::Gateway, type: :db do
           some_id: "a5142003-9453-4fed-ab90-f0bc47db6404",
           some_text: "Hello",
           some_number: 42,
-          some_timestamp: DateTime.new(2017, 2, 1, 10, 0, 0),
+          some_timestamp: Time.parse("2017-02-01 10:00:00"),
           some_nullable_string: "World"
         },
         {
           some_id: "1f87e249-d90a-44c7-a986-51a77cdb01f4",
           some_text: "Foo",
           some_number: 1,
-          some_timestamp: DateTime.new(2017, 2, 10, 14, 0, 0),
+          some_timestamp: Time.parse("2017-02-10 14:00:00"),
           some_nullable_string: nil
         }
       ]
