@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = %w[lib]
 
-  spec.add_development_dependency "bundler", "~> 1.13"
+  spec.add_development_dependency "bundler", "~> 1.14"
   spec.add_development_dependency "hucpa", "~> 0"
   spec.add_development_dependency "jdbc-postgres", "~> 9.4"
   spec.add_development_dependency "pry", "~> 0"

@@ -8,7 +8,7 @@ GEM
   specs:
     ast (2.3.0)
     coderay (1.1.1)
-    concurrent-ruby (1.0.4-java)
+    concurrent-ruby (1.0.5-java)
     diff-lcs (1.3)
     docile (1.1.5)
     dry-configurable (0.6.1)
@@ -89,7 +89,7 @@ PLATFORMS
   java
 
 DEPENDENCIES
-  bundler (~> 1.13)
+  bundler (~> 1.14)
   hucpa (~> 0)
   jdbc!
   jdbc-postgres (~> 9.4)
