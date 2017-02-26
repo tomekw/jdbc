@@ -24,6 +24,14 @@ Or install it yourself as:
 
     $ gem install jdbc
 
+## Public API
+
+| Method                        | Description                                 | Returned value                                              |
+| ----------------------------- | ------------------------------------------- | ----------------------------------------------------------- |
+| `command(sql, bindings = {})` | `INSERT`s, `UPDATE`s, `DELETE`s, etc. calls | Depending on the driver, either full record or primary keys |
+| `ddl(sql, bindings = {})`     | `CREATE TABLES`s, `ADD INDEX`es, etc. calls | `true` or driver exception                                  |
+| `query(sql, bindings = {})`   | `SELECT`s, etc. calls                       | Ruby `Array` of `Hashes`                                    |
+
 ## Usage
 
 Install the database driver, for PostgreSQL:
@@ -147,6 +155,13 @@ gateway.command("DELETE FROM things WHERE id = :id", id: 1)
     created_at: DateTime.new(2017, 2, 2, 10, 20, 45)
   }
 ]
+```
+
+Invoke DDL calls:
+
+```ruby
+gateway.ddl("CREATE INDEX name_idx ON things(name)")
+=> true
 ```
 
 Close the connection pool:

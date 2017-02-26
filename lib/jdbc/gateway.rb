@@ -10,6 +10,12 @@ module JDBC
       end
     end
 
+    def ddl(sql, bindings = {})
+      connection_pool.with_connection do |connection|
+        DDL.new(connection: connection, sql: sql, bindings: bindings).run
+      end
+    end
+
     def query(sql, bindings = {})
       connection_pool.with_connection do |connection|
         Query.new(connection: connection, sql: sql, bindings: bindings).run

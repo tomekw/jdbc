@@ -3,6 +3,25 @@ require "spec_helper"
 RSpec.describe JDBC::Gateway, type: :db do
   subject(:gateway) { described_class.new(connection_pool: connection_pool) }
 
+  describe "#ddl" do
+    let(:result) { gateway.ddl(sql, bindings) }
+
+    let(:bindings) { {} }
+
+    context "when DDL command provided" do
+      let(:sql) { "CREATE INDEX some_text_idx ON things(some_text)" }
+      let(:bindings) { {} }
+
+      after do
+        gateway.ddl("DROP INDEX IF EXISTS some_text_idx")
+      end
+
+      it "adds an index" do
+        expect(result).to eq true
+      end
+    end
+  end
+
   describe "#command" do
     let(:result) { gateway.command(sql, bindings) }
 
