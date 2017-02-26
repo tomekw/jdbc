@@ -172,7 +172,6 @@ connection_pool.close
 
 ## (Known) things that won't work (yet)
 
-* passing `UUID`s as bindings parameters
 * groupping SQL queries / commands in transactions
 
 ## JDBC types

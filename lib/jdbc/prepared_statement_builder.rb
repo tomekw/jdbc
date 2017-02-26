@@ -60,7 +60,7 @@ module JDBC
         if value.nil?
           [parameter_index, jdbc_type || java.sql.Types::NULL]
         else
-          [parameter_index, value.to_java, jdbc_type].compact
+          [parameter_index, java_value, jdbc_type].compact
         end
       end
 
@@ -70,6 +70,18 @@ module JDBC
 
       def jdbc_type
         type ? java.sql.Types.const_get(type) : nil
+      end
+
+      def uuid_value
+        @uuid_value ||= UUID.new(value)
+      end
+
+      def java_value
+        if uuid_value.valid?
+          uuid_value
+        else
+          value
+        end.to_java
       end
     end
     private_constant :ParameterSetter

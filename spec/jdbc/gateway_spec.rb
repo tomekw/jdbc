@@ -70,13 +70,14 @@ RSpec.describe JDBC::Gateway, type: :db do
           INSERT INTO things (
             some_id, some_text, some_number, some_timestamp, some_nullable_string
           ) VALUES (
-            'eaabc03b-7cb0-4ecb-a335-d90eacb03513'::uuid, :some_text, :some_number,
+            :some_id, :some_text, :some_number,
             :some_timestamp:TIMESTAMP, :some_nullable_string
           )
         SQL
       end
       let(:bindings) do
         {
+          some_id: "eaabc03b-7cb0-4ecb-a335-d90eacb03513",
           some_text: "Insert",
           some_number: 42,
           some_timestamp: Time.parse("2017-02-02 10:00:10"),
