@@ -4,7 +4,7 @@
 
 JDBC meets JRuby.
 
-Please note the project support only JRuby (tested with 9.1.7.0+) on Java 8.
+Please note the project supports only JRuby (tested with 9.1.7.0+) on Java 8.
 
 The public API is subject to change before version `1.0.0`.
 
