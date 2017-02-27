@@ -4,21 +4,14 @@ module JDBC
       @connection_pool = connection_pool
     end
 
-    def command(sql, bindings = {})
-      connection_pool.with_connection do |connection|
-        Command.new(connection: connection, sql: sql, bindings: bindings).run
-      end
-    end
-
-    def ddl(sql, bindings = {})
-      connection_pool.with_connection do |connection|
-        DDL.new(connection: connection, sql: sql, bindings: bindings).run
-      end
-    end
-
-    def query(sql, bindings = {})
-      connection_pool.with_connection do |connection|
-        Query.new(connection: connection, sql: sql, bindings: bindings).run
+    %w[Command DDL Query].each do |action_name|
+      define_method(action_name.downcase) do |sql, bindings = {}|
+        connection_pool.with_connection do |connection|
+          JDBC
+            .const_get(action_name)
+            .new(connection: connection, sql: sql, bindings: bindings)
+            .run
+        end
       end
     end
 
