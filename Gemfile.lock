@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jdbc (0.1.0-java)
+    jdbc (0.1.1-java)
 
 GEM
   remote: https://rubygems.org/

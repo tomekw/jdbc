@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name = "jdbc"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.authors = ["Tomek Wałkuski"]
   spec.email = "ja@jestem.tw"
 
@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/tomekw/jdbc"
   spec.license = "MIT"
 
-  spec.platform = "jruby"
+  spec.platform = "java"
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
