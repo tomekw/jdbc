@@ -69,10 +69,8 @@ RSpec.describe JDBC::Gateway, type: :db do
         <<-SQL
           INSERT INTO things (
             some_id, some_text, some_number, some_timestamp, some_nullable_string
-          ) VALUES (
-            :some_id, :some_text, :some_number,
-            :some_timestamp:TIMESTAMP, :some_nullable_string
-          )
+          ) VALUES (:some_id, :some_text, :some_number,
+            :some_timestamp:TIMESTAMP, :some_nullable_string)
         SQL
       end
       let(:bindings) do

@@ -51,6 +51,22 @@ RSpec.describe JDBC::SqlParser do
     end
   end
 
+  context "when simple bindings with parentheses provided" do
+    let(:sql) { "INSERT INTO things (bar, foo) VALUES (:bar, :foo)" }
+    let(:bindings) { { foo: "foo", bar: 1 } }
+
+    let(:expected_result) do
+      [
+        "INSERT INTO things (bar, foo) VALUES (?, ?)",
+        [[1, nil], ["foo", nil]]
+      ]
+    end
+
+    it "returns the parsed query with bindings in the correct order" do
+      expect(parser.parse).to eq expected_result
+    end
+  end
+
   context "when the same binding should be matched twice" do
     let(:sql) { "SELECT * FROM things WHERE bar = :bar OR foo = :bar" }
     let(:bindings) { { bar: 1 } }
